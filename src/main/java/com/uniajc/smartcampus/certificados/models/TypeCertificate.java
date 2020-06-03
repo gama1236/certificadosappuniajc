@@ -1,8 +1,6 @@
 package com.uniajc.smartcampus.certificados.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +35,7 @@ import java.util.List;
 @Entity
 @Table(name = "tipo_certificado")
 @ApiModel(description = "Entidad JPA para tipos de certificado")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "tcId")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "tcId", scope = TypeCertificate.class)
 public class TypeCertificate {
 
     @Id
@@ -73,7 +71,7 @@ public class TypeCertificate {
     @Column(name = "tc_issuer")
     private  String tcIssuer;
 
-    @OneToMany(mappedBy = "typeCertificate" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "typeCertificate", cascade = CascadeType.ALL)
     private List <Certificate> certificate;
 
 }

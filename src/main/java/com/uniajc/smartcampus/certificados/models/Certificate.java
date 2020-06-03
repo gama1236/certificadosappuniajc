@@ -1,8 +1,6 @@
 package com.uniajc.smartcampus.certificados.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,15 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -31,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "certificado")
 @ApiModel(description = "Entidad JPA para certificado")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ceId")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ceId", scope = Certificate.class)
 public class Certificate {
 
     @Id
@@ -52,13 +42,11 @@ public class Certificate {
     @ApiModelProperty(notes = "Estado de certificado", required = true)
     private  Boolean ceState;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "ce_tipo_certificado_id")
     private TypeCertificate typeCertificate;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "certificate")
+    @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL)
     private List<CertificateGenerate> certificateGenerates;
 }
 
