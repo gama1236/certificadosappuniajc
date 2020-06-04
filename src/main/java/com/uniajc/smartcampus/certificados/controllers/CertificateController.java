@@ -6,6 +6,7 @@ import com.uniajc.smartcampus.certificados.services.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +21,15 @@ public class CertificateController {
     private final CertificateService certificateService;
 
     @Autowired
-    public CertificateController (CertificateService certificateService) {
-        this.certificateService= certificateService;
+    public CertificateController(CertificateService certificateService) {
+        this.certificateService = certificateService;
     }
 
     @GetMapping("/show/{id}")
-    public ResponseEntity<SimpleResponse> getalgo(@PathVariable Long id){
+    @PreAuthorize("hasRole('DECANO')")
+    public ResponseEntity<SimpleResponse> showGeneratedCertificatesByTypeCertificate(@PathVariable Long id) {
         List<CertificateResponse> certificateList = certificateService.getCertificateRepository(id);
-
-        return new ResponseEntity<>(SimpleResponse.builder().code(200).message("Exito").value(certificateList).build(), HttpStatus.OK);
+        return new ResponseEntity<>(SimpleResponse.builder().code(200).message("Obtenidos con éxito").value(certificateList).build(), HttpStatus.OK);
     }
 
 }
