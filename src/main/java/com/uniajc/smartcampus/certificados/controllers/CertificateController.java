@@ -1,8 +1,11 @@
 package com.uniajc.smartcampus.certificados.controllers;
 
-import com.uniajc.smartcampus.certificados.models.Certificate;
+import com.uniajc.smartcampus.certificados.responses.CertificateResponse;
+import com.uniajc.smartcampus.certificados.responses.SimpleResponse;
 import com.uniajc.smartcampus.certificados.services.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +25,10 @@ public class CertificateController {
     }
 
     @GetMapping("/show/{id}")
-    public List<Certificate> getalgo(@PathVariable Long id){
-        return certificateService.getCertificateRepository(id);
+    public ResponseEntity<SimpleResponse> getalgo(@PathVariable Long id){
+        List<CertificateResponse> certificateList = certificateService.getCertificateRepository(id);
+
+        return new ResponseEntity<>(SimpleResponse.builder().code(200).message("Exito").value(certificateList).build(), HttpStatus.OK);
     }
 
 }
