@@ -25,8 +25,8 @@ public class CertificateController {
         this.certificateService = certificateService;
     }
 
-    @GetMapping("/show/{id}")
-    @PreAuthorize("hasRole('DECANO')")
+    @GetMapping("/showGeneratedCertificates/TypeCertificate/{id}")
+    @PreAuthorize("hasAnyRole('REGISTRO_ACADEMICO', 'TESORERIA')")
     public ResponseEntity<SimpleResponse> showGeneratedCertificatesByTypeCertificate(@PathVariable Long id) {
         List<CertificateResponse> certificateList = certificateService.getCertificateRepository(id);
         return new ResponseEntity<>(SimpleResponse.builder().code(200).message("Obtenidos con éxito").value(certificateList).build(), HttpStatus.OK);
